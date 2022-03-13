@@ -13,14 +13,14 @@ import javax.swing.JLabel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class Tela extends JFrame{
 	
 	private JLabel label;
-	private JTextField txtcomp;
+	private JTextArea txtcomp;
 	private JTable tbDicionario;
 	private JButton btncompilar;
 	private JButton btnsalvar;
@@ -28,16 +28,19 @@ public class Tela extends JFrame{
 	private JButton btncancelar;
 	private JButton btndoc;
 	private JScrollPane spnDic;
-	private JScrollBar scroll;
+	private ScrollPane txtComp;
 	private DefaultTableModel model;
 	
 	public Tela() {
+
 		setSize(1050,700);
 		setTitle("Compilador");
 		setLayout(null);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		componentesCriar();
+		
+		//main.executar();
 	}
 	
 	
@@ -46,6 +49,8 @@ public class Tela extends JFrame{
 	   
 	
 	private void componentesCriar() {
+		Main main = new Main();
+		main.executar();
 		
 		label = new JLabel("Arquivo");
 		label.setBounds(20,20,200,50);
@@ -71,20 +76,22 @@ public class Tela extends JFrame{
 		btncompilar.setBounds(124, 60, 20, 20);
 		getContentPane().add(btncompilar);
 		
-		txtcomp = new JTextField();
+		txtcomp = new JTextArea();
 		txtcomp.setBounds(20,100,500,500);
+		
 		getContentPane().add(txtcomp);
 		
 		
 		model = new DefaultTableModel();
 		model.addColumn("Código");
 		model.addColumn("Palavra");
-		//model.addRow(new String[] {"25","teste"});*/
+		//Stack <Token> pilha = main.getTokens();
+
+		//model=GerarTabela(model,main.getTokens());
 		
 		tbDicionario = new JTable(model);
 		spnDic = new JScrollPane(tbDicionario);
 		spnDic.setBounds(520, 100, 500, 250);
-		//insert_info(model);
 		
 		getContentPane().add(spnDic);
 		
@@ -92,23 +99,16 @@ public class Tela extends JFrame{
 		
 	}
 	
-	public DefaultTableModel insert_info (DefaultTableModel model,Stack<Token> pilhaTokens) {
+	public DefaultTableModel GerarTabela (DefaultTableModel model,Stack<Token> pilhaTokens) {
 		
-		while() {
-			model.addRown("Código",Token.)
-			
-			
+		while(!pilhaTokens.isEmpty()) {
+			Token topo = pilhaTokens.peek();
+			model.addRow(new String[] {topo.getCodigo().toString(),topo.getPalavra()});
+			pilhaTokens.pop();
 		}
-		
-		
-		
 		return model;
 		
 	}
-	
-	
-	
-	
 	
 	public static void main(String[] args) {
 		new Tela().setVisible(true);

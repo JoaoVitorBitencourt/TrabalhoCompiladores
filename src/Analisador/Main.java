@@ -6,6 +6,8 @@ import Analisador.AnalisadorLexico;
 import Analisador.Token;
 
 public class Main {
+	
+	Stack <Token> pilha;
 
 	
 	public static void main(String args[]) {
@@ -31,7 +33,16 @@ public class Main {
         
         Stack<Token> tokens = new AnalisadorLexico().gerarTokens(programa);
         
-        System.out.println(tokens.elementAt(1));
+       pilha = tokens;
+        
+       
+        
+        System.out.println("");
+    }
+    
+    public Stack<Token> getTokens() {
+    	
+    	return pilha;
     }
     
     

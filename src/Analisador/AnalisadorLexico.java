@@ -18,6 +18,7 @@ public class AnalisadorLexico {
             pilhaTokens.push(new Token(token, codigo));
         }
         
+        
         return pilhaTokens;
     }
     
