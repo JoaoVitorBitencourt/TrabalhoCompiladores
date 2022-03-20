@@ -2,6 +2,9 @@ package Analisador;
 
 import java.util.Stack;
 
+import Gramatica.Gramatica;
+import Gramatica.Token;
+
 public class AnalisadorLexico {
     
     public Stack<Token> gerarTokens(String programa){

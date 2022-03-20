@@ -1,4 +1,4 @@
-package Analisador;
+package Gramatica;
 
 public class Token {
 

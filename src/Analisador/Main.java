@@ -3,7 +3,7 @@ package Analisador;
 import java.util.Stack;
 
 import Analisador.AnalisadorLexico;
-import Analisador.Token;
+import Gramatica.Token;
 
 public class Main {
 	
@@ -18,7 +18,7 @@ public class Main {
         String programa = 
                 "PROGRAM NOMEPROGRAMA ; "
                 + "VAR "
-                + "   X , Y , Z : INTEGER ; "
+                + "   X, Y , Z : INTEGER ; "
                 + "BEGIN "
                 + "   X := 10 ; "
                 + "   Y := 20 ; "
