@@ -18,7 +18,7 @@ public class Main {
         String programa = 
                 "PROGRAM NOMEPROGRAMA ; "
                 + "VAR "
-                + "   X, Y , Z : INTEGER ; "
+                + "   X, Y, Z : INTEGER ; "
                 + "BEGIN "
                 + "   X := 10 ; "
                 + "   Y := 20 ; "
