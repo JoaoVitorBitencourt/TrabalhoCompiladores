@@ -2,20 +2,24 @@ package Analisador;
 
 import java.util.Stack;
 
+import javax.print.DocFlavor.STRING;
+
 import Gramatica.Gramatica;
 import Gramatica.Token;
 
 public class AnalisadorLexico {
     
     public Stack<Token> gerarTokens(String programa){
-        Stack<Token> pilhaInversa = new Stack<>();
-        Stack<Token> pilhaTokens = getListaTokens(programa);
+        // Stack<Token> pilhaInversa = new Stack<>();
+        // Stack<Token> pilhaTokens = getListaTokens(programa);
+        Stack<Token> teste = geraListaToken(programa);
+        return teste;
 
-        while(!pilhaTokens.empty()){
-            pilhaInversa.push(pilhaTokens.pop());
-        }
+        // while(!pilhaTokens.empty()){
+        //     pilhaInversa.push(pilhaTokens.pop());
+        // }
         
-        return pilhaInversa;
+        // return pilhaInversa;
     }
 
     private Stack<Token> getListaTokens(String programa) {
@@ -55,7 +59,7 @@ public class AnalisadorLexico {
                     if(!token.trim().equals("")) {
                         pilhaTokens.push(new Token(token, getCodigoToken(token)));
                         token = "";
-                    }
+                    }   
                     pilhaTokens.push(new Token(validador, getCodigoToken(validador)));
                     i++;
                 break;
@@ -141,5 +145,72 @@ public class AnalisadorLexico {
             return Gramatica.DICIONARIO.get("IDENTIFICADOR");
         } 
         return Gramatica.DICIONARIO.get("INTEIRO");
+    }
+
+    private String[] quebrarEmLinhas(String programa) {
+        String[] teste = programa.split("\n");
+        return teste;
+    }
+
+    private String geraToken(String token){
+        return "";
+    }
+
+    private String separaToken(String[] programa){
+
+        return new String();
+    }
+
+    private String removecomentarios(String programa) {
+        String token = new String();
+        Stack<Token> pilhaTokens = new Stack<>();
+        String programaSemComentario = new String();
+
+        for(int i = 0; i <= programa.length() -1; i++) {
+            String charAtual = Character.toString(programa.charAt(i));
+
+            if(i+1 >= programa.length()) { // trata fim do arquivo
+                if(!charAtual.trim().equals("") || charAtual.equals("\n")){//grava o caracter final do programa se não for nullo ou espaço
+                    programaSemComentario += charAtual;
+                }
+                break;
+            }
+
+            String validador = charAtual + Character.toString(programa.charAt(i+1));
+
+            if(validador.toUpperCase().equals("(*")){
+                for(int j = i; j <= programa.length() -1 ; j++) {
+                    if(j+1 >= programa.length()) { // trata fim do arquivo
+                        if(!Character.toString(programa.charAt(j)).trim().equals("") || Character.toString(programa.charAt(j)).equals("\n")){//grava o caracter final do programa se não for nullo ou espaço
+                            programaSemComentario += Character.toString(programa.charAt(j));
+                            i = j + 1;
+                        }
+                        break;
+                    }
+
+                    String charComentarioAnt = Character.toString(programa.charAt(j)) + programa.charAt(j+1);
+
+                    if(charComentarioAnt.equals("*)")) {
+                        i = j + 1;
+                        break;
+                    }
+                }
+            } else {
+                programaSemComentario += charAtual;
+            }
+        }
+
+        return programaSemComentario;
+    }
+
+    private String leString (String programa) {
+        return "";
+    }
+
+    public Stack<Token> geraListaToken(String programa) {
+        String stringSemComentario = removecomentarios(programa);
+        String[] linhasQuebradas = quebrarEmLinhas(programa);
+
+        return new Stack<Token>();
     }
 }
