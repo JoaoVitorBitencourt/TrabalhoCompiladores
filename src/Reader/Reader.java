@@ -13,7 +13,7 @@ public class Reader {
 	
 	   public String Leitura(File file) throws IOException {
 		   
-		   String linha = null, texto = null;
+		   String linha = "", texto = "";
 		   FileReader arq = new FileReader(file);
 		   BufferedReader lerArq = new BufferedReader(arq);
 		   linha = lerArq.readLine();
