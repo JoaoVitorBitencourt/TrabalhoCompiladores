@@ -1,5 +1,6 @@
 package Analisador;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 import javax.print.DocFlavor.STRING;
@@ -8,8 +9,10 @@ import Gramatica.Gramatica;
 import Gramatica.Token;
 
 public class AnalisadorLexico {
+
+    private boolean continuaComentarioProxLinha;
     
-    public Stack<Token> gerarTokens(String programa){
+    public Stack<Token> gerarTokens(ArrayList<Linha> programa){
         // Stack<Token> pilhaInversa = new Stack<>();
         // Stack<Token> pilhaTokens = getListaTokens(programa);
         Stack<Token> teste = geraListaToken(programa);
@@ -161,55 +164,69 @@ public class AnalisadorLexico {
         return new String();
     }
 
-    private String removecomentarios(String programa) {
+    private ArrayList<Linha> RemoveComentarios(ArrayList<Linha> programa) {
         String token = new String();
         Stack<Token> pilhaTokens = new Stack<>();
         String programaSemComentario = new String();
 
-        for(int i = 0; i <= programa.length() -1; i++) {
-            String charAtual = Character.toString(programa.charAt(i));
+        for(Linha linha : programa) {
+            String LinhaAtual = linha.getTexto();
+           
+            for(int i = 0; i <= LinhaAtual.length() -1; i++){
+                String charAtual = Character.toString(LinhaAtual.charAt(i));
 
-            if(i+1 >= programa.length()) { // trata fim do arquivo
-                if(!charAtual.trim().equals("") || charAtual.equals("\n")){//grava o caracter final do programa se não for nullo ou espaço
+                if(i+1 >= LinhaAtual.length()) { // trata fim do arquivo
+                    if(!charAtual.trim().equals("") || charAtual.equals("\n")){//grava o caracter final do programa se não for nullo ou espaço
+                        programaSemComentario += charAtual;
+                    }
+                    break;
+                }
+    
+                String validador = charAtual + Character.toString(LinhaAtual.charAt(i+1));
+    
+                if(validador.toUpperCase().equals("(*") || continuaComentarioProxLinha){
+                    continuaComentarioProxLinha = true;
+                    for(int j = i; j <= LinhaAtual.length() -1 ; j++) {
+                        String charAtualComentario = Character.toString(LinhaAtual.charAt(j));
+    
+                        if(charAtualComentario.equals("\n")) {
+                            programaSemComentario += charAtualComentario;
+                        }
+    
+                        if(j+1 >= LinhaAtual.length()) { // trata fim do arquivo
+                            i = j;
+                            break;
+                        }
+    
+                        String charComentarioAnt = charAtualComentario + LinhaAtual.charAt(j+1);
+    
+                        if(charComentarioAnt.equals("*)")) {
+                            continuaComentarioProxLinha = false;
+                            i = j + 1;
+                            break;
+                        }
+                    }
+                } else {
                     programaSemComentario += charAtual;
                 }
-                break;
             }
 
-            String validador = charAtual + Character.toString(programa.charAt(i+1));
-
-            if(validador.toUpperCase().equals("(*")){
-                for(int j = i; j <= programa.length() -1 ; j++) {
-                    if(j+1 >= programa.length()) { // trata fim do arquivo
-                        if(!Character.toString(programa.charAt(j)).trim().equals("") || Character.toString(programa.charAt(j)).equals("\n")){//grava o caracter final do programa se não for nullo ou espaço
-                            programaSemComentario += Character.toString(programa.charAt(j));
-                            i = j + 1;
-                        }
-                        break;
-                    }
-
-                    String charComentarioAnt = Character.toString(programa.charAt(j)) + programa.charAt(j+1);
-
-                    if(charComentarioAnt.equals("*)")) {
-                        i = j + 1;
-                        break;
-                    }
-                }
-            } else {
-                programaSemComentario += charAtual;
-            }
+            linha.setTexto(programaSemComentario);
+            programaSemComentario = "";
         }
 
-        return programaSemComentario;
+        System.out.println(programaSemComentario);
+
+        return programa;
     }
 
     private String leString (String programa) {
         return "";
     }
 
-    public Stack<Token> geraListaToken(String programa) {
-        String stringSemComentario = removecomentarios(programa);
-        String[] linhasQuebradas = quebrarEmLinhas(programa);
+    public Stack<Token> geraListaToken(ArrayList<Linha> programa) {
+        ArrayList<Linha> stringSemComentario = RemoveComentarios(programa);
+        // String[] linhasQuebradas = quebrarEmLinhas(stringSemComentario);
 
         return new Stack<Token>();
     }

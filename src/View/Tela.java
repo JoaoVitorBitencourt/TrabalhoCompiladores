@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 //import java.util.HashMap;
 //import java.util.Map;
 import java.util.Stack;
@@ -15,6 +16,8 @@ import java.util.Stack;
 //import javax.swing.event.*;
 import javax.swing.text.Element;
 
+import Analisador.AnalisadorLexico;
+import Analisador.Linha;
 import Analisador.Main;
 //import Enumerate_TextArea.LineNumberingTextArea;
 import Gramatica.Token;
@@ -153,6 +156,12 @@ public class Tela extends JFrame{
 		btncompilar = new JButton();
 		btncompilar.setBounds(82, 60, 20, 20);
 		btncompilar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/compilar.png")));
+		btncompilar.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e ) {
+				AnalisadorLexico a = new AnalisadorLexico();
+				a.gerarTokens(gerarLinhas(txtcomp.getText()));
+			}
+		});
 		getContentPane().add(btncompilar);
 		
 		
@@ -197,7 +206,7 @@ public class Tela extends JFrame{
 		
 		
 		model = new DefaultTableModel();
-		model.addColumn("Código");
+		model.addColumn("Cï¿½digo");
 		model.addColumn("Palavra");
 		//Stack <Token> pilha = main.getTokens();
 
@@ -217,12 +226,6 @@ public class Tela extends JFrame{
 		SpnConsole= new JScrollPane(console);
 		SpnConsole.setBounds(520, 400, 500, 150);
 		getContentPane().add(SpnConsole);
-		
-		
-		
-		
-		
-		
 	}
 	
 	
@@ -238,6 +241,17 @@ public class Tela extends JFrame{
 		}
 		return model;
 		
+	}
+
+	private ArrayList<Linha> gerarLinhas(String programa) {
+		String[] teste = programa.split("\n");
+		ArrayList<Linha> linhas = new ArrayList<Linha>();
+
+		for(int i = 0; i < teste.length; i++){
+			linhas.add(new Linha(i + 1, teste[i]));
+		}
+
+        return linhas;
 	}
 	
 	public static void main(String[] args) {
