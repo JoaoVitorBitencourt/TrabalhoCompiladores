@@ -34,7 +34,13 @@ public class AnalisadorLexico {
 
             if(i+1 >= programa.length()) { // trata fim do arquivo
                 if(!token.trim().equals("")) { // verifica se há algum token para armazenar antes de finalizar
-                    pilhaTokens.push(new Token(token, getCodigoToken(token)));
+                    if(isLimitador(charAtual)) {
+                        pilhaTokens.push(new Token(token, getCodigoToken(token)));
+                    } else {
+                        token += charAtual;
+                        charAtual = "";
+                        pilhaTokens.push(new Token(token, getCodigoToken(token)));
+                    }
                 }
                 if(!charAtual.trim().equals("")){//grava o caracter final do programa se não for nullo ou espaço
                     pilhaTokens.push(new Token(charAtual, getCodigoToken(charAtual)));
@@ -45,15 +51,6 @@ public class AnalisadorLexico {
             String validador = charAtual + Character.toString(programa.charAt(i+1));
 
             switch(validador.toUpperCase()){
-                case "(*": 
-                    for(int j = i; j <= programa.length() -1 ; j++) {
-                        String charComentarioAnt = Character.toString(programa.charAt(j)) + programa.charAt(j+1);
-                        if(charComentarioAnt.equals("*)")) {
-                            i = j + 1;
-                            break;
-                        }
-                    }
-                break;
                 case ":=":
                 case "<=":
                 case ">=":
@@ -121,6 +118,30 @@ public class AnalisadorLexico {
 
         return pilhaTokens;
     }
+
+    private boolean isLimitador(String charAtual){
+        switch(charAtual) {
+            case "'": 
+            case "`":
+            case "´":
+            case "‘":
+            case ";": 
+            case " ":
+            case ",":
+            case ".":
+            case ":":
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+            case "[":
+            case "]":
+            case "(":
+            case ")":
+            case "=": return true;
+            default: return false;
+        }
+    }
     
     private Integer getCodigoToken(String token){
         
@@ -141,8 +162,6 @@ public class AnalisadorLexico {
                 identificador = true;
             }
         }
-        
-        
 
         if(identificador) {
             return Gramatica.DICIONARIO.get("IDENTIFICADOR");
@@ -150,23 +169,15 @@ public class AnalisadorLexico {
         return Gramatica.DICIONARIO.get("INTEIRO");
     }
 
-    private String[] quebrarEmLinhas(String programa) {
-        String[] teste = programa.split("\n");
-        return teste;
-    }
+    private ArrayList<Linha> geraToken(ArrayList<Linha> Linhas){
+        for(Linha linha : Linhas) {
+            linha.setTokens(getListaTokens(linha.getTexto()));
+        }
 
-    private String geraToken(String token){
-        return "";
-    }
-
-    private String separaToken(String[] programa){
-
-        return new String();
+        return Linhas;
     }
 
     private ArrayList<Linha> RemoveComentarios(ArrayList<Linha> programa) {
-        String token = new String();
-        Stack<Token> pilhaTokens = new Stack<>();
         String programaSemComentario = new String();
 
         for(Linha linha : programa) {
@@ -226,8 +237,15 @@ public class AnalisadorLexico {
 
     public Stack<Token> geraListaToken(ArrayList<Linha> programa) {
         ArrayList<Linha> stringSemComentario = RemoveComentarios(programa);
-        // String[] linhasQuebradas = quebrarEmLinhas(stringSemComentario);
+        stringSemComentario = geraToken(stringSemComentario);
+        Stack<Token> tokenParaMostrarEmTela = new Stack<Token>();
 
-        return new Stack<Token>();
+        for(Linha l : stringSemComentario) {
+            for(Token t : l.getTokens()){
+                tokenParaMostrarEmTela.add(t);
+            }
+        }
+
+        return tokenParaMostrarEmTela;
     }
 }
