@@ -11,16 +11,8 @@ public class AnalisadorLexico {
     private boolean continuaComentarioProxLinha;
     
     public Stack<Token> gerarTokens(ArrayList<Linha> programa){
-        // Stack<Token> pilhaInversa = new Stack<>();
-        // Stack<Token> pilhaTokens = getListaTokens(programa);
         Stack<Token> teste = geraListaToken(programa);
         return teste;
-
-        // while(!pilhaTokens.empty()){
-        //     pilhaInversa.push(pilhaTokens.pop());
-        // }
-        
-        // return pilhaInversa;
     }
 
     private Stack<Token> getListaTokens(String programa) {
