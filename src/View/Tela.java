@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 //import java.util.HashMap;
 //import java.util.Map;
 import java.util.Stack;
@@ -15,6 +16,8 @@ import java.util.Stack;
 //import javax.swing.event.*;
 import javax.swing.text.Element;
 
+import Analisador.AnalisadorLexico;
+import Analisador.Linha;
 import Analisador.Main;
 //import Enumerate_TextArea.LineNumberingTextArea;
 import Gramatica.Token;
@@ -96,6 +99,10 @@ public class Tela extends JFrame{
 		labelArq = new JLabel("Arquivo");
 		labelArq.setBounds(20,20,200,50);
 		getContentPane().add(labelArq);
+
+		model = new DefaultTableModel();
+		model.addColumn("Cï¿½digo");
+		model.addColumn("Palavra");
 		
 		btnabrir = new JButton();
 		btnabrir.setBounds(40, 60, 20, 20);
@@ -153,6 +160,12 @@ public class Tela extends JFrame{
 		btncompilar = new JButton();
 		btncompilar.setBounds(82, 60, 20, 20);
 		btncompilar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/compilar.png")));
+		btncompilar.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e ) {
+				AnalisadorLexico a = new AnalisadorLexico();
+				model = GerarTabela(model, a.gerarTokens(gerarLinhas(txtcomp.getText())));
+			}
+		});
 		getContentPane().add(btncompilar);
 		
 		
@@ -193,12 +206,6 @@ public class Tela extends JFrame{
 		
 		getContentPane().add(txtComp);
 		
-		
-		
-		
-		model = new DefaultTableModel();
-		model.addColumn("Código");
-		model.addColumn("Palavra");
 		//Stack <Token> pilha = main.getTokens();
 
 		//model=GerarTabela(model,main.getTokens());
@@ -217,12 +224,6 @@ public class Tela extends JFrame{
 		SpnConsole= new JScrollPane(console);
 		SpnConsole.setBounds(520, 400, 500, 150);
 		getContentPane().add(SpnConsole);
-		
-		
-		
-		
-		
-		
 	}
 	
 	
@@ -230,14 +231,29 @@ public class Tela extends JFrame{
 
 
 	public DefaultTableModel GerarTabela (DefaultTableModel model,Stack<Token> pilhaTokens) {
+		Stack<Token> pilhaTokensInversa = new Stack<Token>();
+
+         while(!pilhaTokens.empty()){
+			pilhaTokensInversa.push(pilhaTokens.pop());
+		}
 		
-		while(!pilhaTokens.isEmpty()) {
-			Token topo = pilhaTokens.peek();
+		while(!pilhaTokensInversa.isEmpty()) {
+			Token topo = pilhaTokensInversa.pop();
 			model.addRow(new String[] {topo.getCodigo().toString(),topo.getPalavra()});
-			pilhaTokens.pop();
 		}
 		return model;
 		
+	}
+
+	private ArrayList<Linha> gerarLinhas(String programa) {
+		String[] teste = programa.split("\n");
+		ArrayList<Linha> linhas = new ArrayList<Linha>();
+
+		for(int i = 0; i < teste.length; i++){
+			linhas.add(new Linha(i + 1, teste[i]));
+		}
+
+        return linhas;
 	}
 	
 	public static void main(String[] args) {
