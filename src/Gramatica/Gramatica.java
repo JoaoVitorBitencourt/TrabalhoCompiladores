@@ -2,10 +2,11 @@ package Gramatica;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 public class Gramatica {
 	public static final Map<String, Integer> DICIONARIO = new HashMap<String, Integer>();
-	public static final Map<String, Integer> DICIONARIONAOTERMINAL = new HashMap<String, Integer>();
+
 	public static final Map<String, String> TABELAPARSING = new HashMap<String, String>();
 
 	static {
@@ -64,42 +65,42 @@ public class Gramatica {
 	}
 
 	static {
-		DICIONARIONAOTERMINAL.put("PROGRAMA", 52);
-		DICIONARIONAOTERMINAL.put("BLOCO", 53);
-		DICIONARIONAOTERMINAL.put("DCLROT", 54);
-		DICIONARIONAOTERMINAL.put("LID", 55);
-		DICIONARIONAOTERMINAL.put("REPIDENT", 56);
-		DICIONARIONAOTERMINAL.put("DCLCONST", 57);
-		DICIONARIONAOTERMINAL.put("LDCONST", 58);
-		DICIONARIONAOTERMINAL.put("DCLVAR", 59);
-		DICIONARIONAOTERMINAL.put("LDVAR", 60);
-		DICIONARIONAOTERMINAL.put("TIPO", 61);
-		DICIONARIONAOTERMINAL.put("DCLPROC", 62);
-		DICIONARIONAOTERMINAL.put("DEFPAR", 63);
-		DICIONARIONAOTERMINAL.put("CORPO", 64);
-		DICIONARIONAOTERMINAL.put("REPCOMANDO", 65);
-		DICIONARIONAOTERMINAL.put("COMANDO", 66);
-		DICIONARIONAOTERMINAL.put("RCOMID", 67);
-		DICIONARIONAOTERMINAL.put("RVAR", 68);
-		DICIONARIONAOTERMINAL.put("PARAMETROS", 69);
-		DICIONARIONAOTERMINAL.put("REPPAR", 70);
-		DICIONARIONAOTERMINAL.put("ELSEPARTE", 71);
-		DICIONARIONAOTERMINAL.put("VARIAVEL", 72);
-		DICIONARIONAOTERMINAL.put("VARIAVEL1", 73);
-		DICIONARIONAOTERMINAL.put("REPVARIAVEL", 74);
-		DICIONARIONAOTERMINAL.put("ITEMSAIDA", 75);
-		DICIONARIONAOTERMINAL.put("REPITEM", 76);
-		DICIONARIONAOTERMINAL.put("EXPRESSAO", 77);
-		DICIONARIONAOTERMINAL.put("REPEXPSIMP", 78);
-		DICIONARIONAOTERMINAL.put("EXPSIMP", 79);
-		DICIONARIONAOTERMINAL.put("REPEXP", 80);
-		DICIONARIONAOTERMINAL.put("TERMO", 81);
-		DICIONARIONAOTERMINAL.put("REPTERMO", 82);
-		DICIONARIONAOTERMINAL.put("FATOR", 83);
-		DICIONARIONAOTERMINAL.put("CONDCASE", 84);
-		DICIONARIONAOTERMINAL.put("CONTCASE", 85);
-		DICIONARIONAOTERMINAL.put("RPINTEIRO", 86);
-		DICIONARIONAOTERMINAL.put("SEMEFEITO", 87);
+		DICIONARIO.put("PROGRAMA", 52);
+		DICIONARIO.put("BLOCO", 53);
+		DICIONARIO.put("DCLROT", 54);
+		DICIONARIO.put("LID", 55);
+		DICIONARIO.put("REPIDENT", 56);
+		DICIONARIO.put("DCLCONST", 57);
+		DICIONARIO.put("LDCONST", 58);
+		DICIONARIO.put("DCLVAR", 59);
+		DICIONARIO.put("LDVAR", 60);
+		DICIONARIO.put("TIPO", 61);
+		DICIONARIO.put("DCLPROC", 62);
+		DICIONARIO.put("DEFPAR", 63);
+		DICIONARIO.put("CORPO", 64);
+		DICIONARIO.put("REPCOMANDO", 65);
+		DICIONARIO.put("COMANDO", 66);
+		DICIONARIO.put("RCOMID", 67);
+		DICIONARIO.put("RVAR", 68);
+		DICIONARIO.put("PARAMETROS", 69);
+		DICIONARIO.put("REPPAR", 70);
+		DICIONARIO.put("ELSEPARTE", 71);
+		DICIONARIO.put("VARIAVEL", 72);
+		DICIONARIO.put("VARIAVEL1", 73);
+		DICIONARIO.put("REPVARIAVEL", 74);
+		DICIONARIO.put("ITEMSAIDA", 75);
+		DICIONARIO.put("REPITEM", 76);
+		DICIONARIO.put("EXPRESSAO", 77);
+		DICIONARIO.put("REPEXPSIMP", 78);
+		DICIONARIO.put("EXPSIMP", 79);
+		DICIONARIO.put("REPEXP", 80);
+		DICIONARIO.put("TERMO", 81);
+		DICIONARIO.put("REPTERMO", 82);
+		DICIONARIO.put("FATOR", 83);
+		DICIONARIO.put("CONDCASE", 84);
+		DICIONARIO.put("CONTCASE", 85);
+		DICIONARIO.put("RPINTEIRO", 86);
+		DICIONARIO.put("SEMEFEITO", 87);
 
 	}
 
@@ -306,6 +307,24 @@ public class Gramatica {
 		TABELAPARSING.put("86,39", "NULL");
 		TABELAPARSING.put("86,46", ",|INTEIRO|RPINTEIRO");
 
+	}
+
+	public static Integer[] dadosCruzados(String palavra) {
+		if ((palavra != null) && (palavra.length() != 0) && !"null".equals(palavra)) {
+
+			// - tem a mesma função do método split, quebra a linha em determinado caracter
+			StringTokenizer tokenizer = new StringTokenizer(palavra, "|");
+			Integer dados[] = new Integer[tokenizer.countTokens()];
+			int i = 0;
+
+			while (tokenizer.hasMoreTokens()) {
+				String string = tokenizer.nextToken();
+				dados[i++] = DICIONARIO.get(string);
+			}
+
+			return dados;
+		}
+		return null;
 	}
 
 }

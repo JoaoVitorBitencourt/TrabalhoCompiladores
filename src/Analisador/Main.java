@@ -4,13 +4,16 @@ import java.util.Stack;
 
 import Analisador.AnalisadorLexico;
 import Gramatica.Token;
+import View.Tela;
 
 public class Main {
 
     Stack<Token> pilha;
 
     public static void main(String args[]) {
-        new Main().executar();
+        Tela tela = new Tela();
+        tela.setVisible(true);
+        // new Main().executar();
     }
 
     public void executar() {
