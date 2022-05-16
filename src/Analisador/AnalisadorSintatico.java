@@ -45,9 +45,16 @@ public class AnalisadorSintatico {
                 String table = Gramatica.TABELAPARSING.get(X.toString() + "," + codigo.toString());
                 pilhaX.pop();
 
-                if (!table.equals(null) && !table.isEmpty()) {
+                System.out.println(table);
 
-                    System.out.println(table);
+                if (table == null) {
+
+                    System.out.println("Erro no no código: " + A.getPalavra() + "");
+                    break;
+
+                }
+
+                if (!table.equals(null) && !table.isEmpty()) {
 
                     if (table != "NULL") {
                         Integer[] dados = Gramatica.dadosCruzados(table); // - Busca os não terminais
