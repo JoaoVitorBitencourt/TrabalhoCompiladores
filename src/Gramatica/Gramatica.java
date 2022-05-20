@@ -60,9 +60,6 @@ public class Gramatica {
     	DICIONARIO.put(".", 49);
     	DICIONARIO.put(".", 50);
     	DICIONARIO.put("..", 51);
-        
- 
-       
     }
 
 }
