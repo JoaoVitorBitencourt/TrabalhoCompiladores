@@ -38,6 +38,7 @@ public class Tela extends JFrame {
 	private static JTextArea lines;
 	private static JTextArea txtcomp;
 	private JTextArea console;
+	
 	private JTable tbDicionario;
 	private JButton btncompilar;
 	private JButton btnsalvar;
@@ -71,7 +72,6 @@ public class Tela extends JFrame {
 		txtcomp = new JTextArea();
 		lines = new JTextArea("1");
 
-		String Text = "";
 		JFileChooser Arquivo = new JFileChooser();
 		labelArq = new JLabel("Arquivo");
 		labelArq.setBounds(20, 20, 200, 50);
@@ -147,11 +147,18 @@ public class Tela extends JFrame {
 
 				AnalisadorLexico a = new AnalisadorLexico();
 				AnalisadorSintatico b = new AnalisadorSintatico();
-				model = GerarTabela(model, a.gerarTokens(gerarLinhas(txtcomp.getText())));
 
-				Stack<Token> pilha = a.gerarTokens(gerarLinhas(txtcomp.getText()));
-				Stack<Token> pilhainversa = PilhaInversa(pilha);
-				b.analisar(pilhainversa);
+				// Stack<Token> pilha = new Stack<Token>();
+				try {
+					Stack<Token> pilha = a.gerarTokens(gerarLinhas(txtcomp.getText()));
+					model = GerarTabela(model, a.gerarTokens(gerarLinhas(txtcomp.getText())));
+					Stack<Token> pilhainversa = PilhaInversa(pilha);
+					b.analisar(pilhainversa);
+				} catch (Exception error) {
+					// console = new JTextArea();
+					console.setText(error.getMessage());
+					// console.append();
+				}
 			}
 		});
 		getContentPane().add(btncompilar);
@@ -245,11 +252,7 @@ public class Tela extends JFrame {
 		return pilhaTokensInversa;
 	}
 
-	
 	public static void main(String[] args) {
 		new Tela().setVisible(true);
-	 
 	}
-	
-
 }

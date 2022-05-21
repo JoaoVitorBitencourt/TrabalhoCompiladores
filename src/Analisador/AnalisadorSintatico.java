@@ -10,7 +10,7 @@ public class AnalisadorSintatico {
     // -- Para próximas correções é necessário tratar determinadas situações em
     // erros, por exemplo a declaração de variáveis.
 
-    public void analisar(Stack<Token> tokens) {
+    public void analisar(Stack<Token> tokens) throws Exception {
 
         Stack<Token> pilhaA = tokens;
         Stack<Integer> pilhaX = new Stack();
@@ -48,10 +48,8 @@ public class AnalisadorSintatico {
                 System.out.println(table);
 
                 if (table == null) {
-
-                    System.out.println("Erro no no código: " + A.getPalavra() + "");
-                    break;
-
+                    // System.out.println("Erro no no código: " + A.getPalavra() + "");
+                    throw new Exception("Erro no no código: " + A.getPalavra() + "");
                 }
 
                 if (!table.equals(null) && !table.isEmpty()) {
