@@ -154,6 +154,7 @@ public class Tela extends JFrame {
 					model = GerarTabela(model, a.gerarTokens(gerarLinhas(txtcomp.getText())));
 					Stack<Token> pilhainversa = PilhaInversa(pilha);
 					b.analisar(pilhainversa);
+					console.setText("Programa compilado com sucesso!");
 				} catch (Exception error) {
 					// console = new JTextArea();
 					console.setText(error.getMessage());
