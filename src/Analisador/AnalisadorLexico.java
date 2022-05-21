@@ -10,7 +10,7 @@ public class AnalisadorLexico {
 
     private boolean continuaComentarioProxLinha;
 
-    public Stack<Token> gerarTokens(ArrayList<Linha> programa) {
+    public Stack<Token> gerarTokens(ArrayList<Linha> programa) throws Exception {
         Stack<Token> teste = geraListaToken(programa);
         return teste;
     }
@@ -139,15 +139,11 @@ public class AnalisadorLexico {
         }
     }
 
-    private Integer getCodigoToken(String token) {
+    private Integer getCodigoToken(String token) throws Exception {
         Integer codigoToken = Gramatica.DICIONARIO.get(token.toUpperCase());
         if (codigoToken == null) {
             // INTEGER ou é um IDENTIFICADOR
-            try {
-                return getIdentificadorOuInteiro(token);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            return getIdentificadorOuInteiro(token);
         }
         return codigoToken;
     }
@@ -181,14 +177,14 @@ public class AnalisadorLexico {
         }
     }
 
-    private ArrayList<Linha> geraToken(ArrayList<Linha> Linhas) {
-        try {
+    private ArrayList<Linha> geraToken(ArrayList<Linha> Linhas) throws Exception {
+        // try {
             for (Linha linha : Linhas) {
                 linha.setTokens(getListaTokens(linha.getTexto()));
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        // } catch (Exception e) {
+            
+        // }
 
         return Linhas;
     }
@@ -248,7 +244,7 @@ public class AnalisadorLexico {
         return programa;
     }
 
-    public Stack<Token> geraListaToken(ArrayList<Linha> programa) {
+    public Stack<Token> geraListaToken(ArrayList<Linha> programa) throws Exception {
         ArrayList<Linha> stringSemComentario = RemoveComentarios(programa);
         stringSemComentario = geraToken(stringSemComentario);
         Stack<Token> tokenParaMostrarEmTela = new Stack<Token>();
