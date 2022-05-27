@@ -81,13 +81,20 @@ public class AnalisadorLexico {
                                 throw new Exception("O literal precisa finalizar na mesma linha");
                             }
                             break;
-                        case ";":
+                        case "-":
+                            if (!token.trim().equals("")) {
+                                pilhaTokens.push(new Token(token, getCodigoToken(token))); // grava token
+                                token = "";
+                            }
+
+                            token = charAtual;
+                            break;
                         case " ":
+                        case ";":
                         case ",":
                         case ".":
                         case ":":
                         case "+":
-                        case "-":
                         case "*":
                         case "/":
                         case "[":
@@ -166,7 +173,7 @@ public class AnalisadorLexico {
             }
             return Gramatica.DICIONARIO.get("IDENTIFICADOR");
         } else {
-            if (token.matches("[0-9]*")) {
+            if (token.matches("-?[0-9]*")) {
                 if (Integer.parseInt(token) > 32767 || Integer.parseInt(token) < -32767) {
                     throw new Exception("O valor do inteiro precisa estar entre -32767 e 32767");
                 }
@@ -178,13 +185,9 @@ public class AnalisadorLexico {
     }
 
     private ArrayList<Linha> geraToken(ArrayList<Linha> Linhas) throws Exception {
-        // try {
-            for (Linha linha : Linhas) {
-                linha.setTokens(getListaTokens(linha.getTexto()));
-            }
-        // } catch (Exception e) {
-            
-        // }
+        for (Linha linha : Linhas) {
+            linha.setTokens(getListaTokens(linha.getTexto()));
+        }
 
         return Linhas;
     }

@@ -145,20 +145,17 @@ public class Tela extends JFrame {
 				model.addColumn("Palavra");
 				tbDicionario.setModel(model);
 
-				AnalisadorLexico a = new AnalisadorLexico();
-				AnalisadorSintatico b = new AnalisadorSintatico();
+				AnalisadorLexico analisadorLexico = new AnalisadorLexico();
+				AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico();
 
-				// Stack<Token> pilha = new Stack<Token>();
 				try {
-					Stack<Token> pilha = a.gerarTokens(gerarLinhas(txtcomp.getText()));
-					model = GerarTabela(model, a.gerarTokens(gerarLinhas(txtcomp.getText())));
+					Stack<Token> pilha = analisadorLexico.gerarTokens(gerarLinhas(txtcomp.getText()));
+					model = GerarTabela(model, analisadorLexico.gerarTokens(gerarLinhas(txtcomp.getText())));
 					Stack<Token> pilhainversa = PilhaInversa(pilha);
-					b.analisar(pilhainversa);
+					analisadorSintatico.analisar(pilhainversa);
 					console.setText("Programa compilado com sucesso!");
 				} catch (Exception error) {
-					// console = new JTextArea();
 					console.setText(error.getMessage());
-					// console.append();
 				}
 			}
 		});
