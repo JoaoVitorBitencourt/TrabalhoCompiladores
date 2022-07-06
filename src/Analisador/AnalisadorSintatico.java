@@ -7,7 +7,19 @@ import Gramatica.Token;
 
 public class AnalisadorSintatico {
 
-    public void analisar(Stack<Token> tokens) throws Exception {
+
+    // -- Para próximas correções é necessário tratar determinadas situações em
+    // erros, por exemplo a declaração de variáveis.
+
+    public void analisadorSintatico(Stack<Token> tokens) {
+        try {
+            analisar(tokens);
+        } catch (Exception e) {
+            
+        }
+    }
+
+    private void analisar(Stack<Token> tokens) throws Exception {
 
         Stack<Token> pilhaA = tokens;
         Stack<Integer> pilhaX = new Stack<Integer>();
@@ -45,7 +57,7 @@ public class AnalisadorSintatico {
                 System.out.println(table);
 
                 if (table == null) {
-                    throw new Exception("Erro no código: " + A.getPalavra() + "");
+                    throw new Exception("Erro no código: " + A.getPalavra() + " Linha: " + A.getLinha());
                 }
 
                 if (!table.equals(null) && !table.isEmpty()) {
@@ -75,9 +87,12 @@ public class AnalisadorSintatico {
     }
 
     private void VerificaPilhas(Stack<Token> pilhaA, Stack<Integer> pilhaX) throws Exception {
-        if (!(pilhaX.isEmpty() && pilhaA.isEmpty())) {
-            throw new Exception("Erro na compilação do programa!");
-        } 
+
+        if (pilhaX.isEmpty() && pilhaA.isEmpty()) {
+            System.out.println("Programa compilado com sucesso!");
+        } else {
+            throw new Exception("Erro de compilação");
+        }
     }
 
 }

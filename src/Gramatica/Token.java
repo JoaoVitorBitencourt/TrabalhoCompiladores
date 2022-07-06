@@ -4,10 +4,12 @@ public class Token {
 
     private String palavra;
     private Integer codigo;
+    private Integer linha;
 
-    public Token(String palavra, Integer codigo) {
+    public Token(String palavra, Integer codigo, Integer linha) {
         this.palavra = palavra;
         this.codigo = codigo;
+        this.linha = linha;
     }
     
     public String getPalavra() {
@@ -16,6 +18,10 @@ public class Token {
 
     public Integer getCodigo() {
         return codigo;
+    }
+
+    public Integer getLinha() {
+        return linha;
     }
 
     @Override

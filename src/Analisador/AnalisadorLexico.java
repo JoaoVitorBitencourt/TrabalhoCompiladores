@@ -15,111 +15,105 @@ public class AnalisadorLexico {
         return teste;
     }
 
-    private Stack<Token> getListaTokens(String programa) throws Exception {
+
+    private Stack<Token> getListaTokens(String programa, int linha) throws Exception {
         String token = new String();
         Stack<Token> pilhaTokens = new Stack<>();
 
-        for (int i = 0; i <= programa.length() - 1; i++) {
-            String charAtual = Character.toString(programa.charAt(i));
+            for (int i = 0; i <= programa.length() - 1; i++) {
+                String charAtual = Character.toString(programa.charAt(i));
 
-            if (i + 1 >= programa.length()) { // trata fim do arquivo
-                if (!token.trim().equals("")) { // verifica se há algum token para armazenar antes de finalizar
-                    if (isLimitador(charAtual)) {
-                        pilhaTokens.push(new Token(token, getCodigoToken(token)));
-                    } else {
-                        token += charAtual;
-                        charAtual = "";
-                        pilhaTokens.push(new Token(token, getCodigoToken(token)));
+                if (i + 1 >= programa.length()) { // trata fim do arquivo
+                    if (!token.trim().equals("")) { // verifica se há algum token para armazenar antes de finalizar
+                        if (isLimitador(charAtual)) {
+                            pilhaTokens.push(new Token(token, getCodigoToken(token), linha));
+                        } else {
+                            token += charAtual;
+                            charAtual = "";
+                            pilhaTokens.push(new Token(token, getCodigoToken(token), linha));
+                        }
                     }
-                }
-                if (!charAtual.trim().equals("")) {// grava o caracter final do programa se não for nullo ou espaço
-                    pilhaTokens.push(new Token(charAtual, getCodigoToken(charAtual)));
+                    if (!charAtual.trim().equals("")) {// grava o caracter final do programa se não for nullo ou espaço
+                        pilhaTokens.push(new Token(charAtual, getCodigoToken(charAtual), linha));
                 }
                 break;
             }
 
-            String validador = charAtual + Character.toString(programa.charAt(i + 1));
+                String validador = charAtual + Character.toString(programa.charAt(i + 1));
 
-            switch (validador.toUpperCase()) {
-                case ":=":
-                case "<=":
-                case ">=":
-                case "<>":
-                case "..":
-                    if (!token.trim().equals("")) {
-                        pilhaTokens.push(new Token(token, getCodigoToken(token)));
-                        token = "";
-                    }
-                    pilhaTokens.push(new Token(validador, getCodigoToken(validador)));
-                    i++;
-                    break;
-                default:
-                    switch (charAtual) {
-                        case "'":
-                            String stringCod = new String();
-                            stringCod = charAtual; // grava char atual e começa o for a partir do proximo
+                switch (validador.toUpperCase()) {
+                    case ":=":
+                    case "<=":
+                    case ">=":
+                    case "<>":
+                    case "..":
+                        if (!token.trim().equals("")) {
+                            pilhaTokens.push(new Token(token, getCodigoToken(token), linha));
+                            token = "";
+                        }
+                        pilhaTokens.push(new Token(validador, getCodigoToken(validador), linha));
+                        i++;
+                        break;
+                    default:
+                        switch (charAtual) {
+                            case "'":
+                                String stringCod = new String();
+                                stringCod = charAtual; // grava char atual e começa o for a partir do proximo
 
-                            for (int j = i + 1; j <= programa.length() - 1; j++) {
-                                String charStringAtual = Character.toString(programa.charAt(j));
+                                for (int j = i + 1; j <= programa.length() - 1; j++) {
+                                    String charStringAtual = Character.toString(programa.charAt(j));
 
-                                if (!(charStringAtual.equals("'"))) {
-                                    stringCod += charStringAtual;
-                                } else {
-                                    stringCod += charStringAtual;
-                                    if (stringCod.length() > 255) {
-                                        throw new Exception("O tamanho máximo para um literal é 255");
+                                    if (!(charStringAtual.equals("'"))) {
+                                        stringCod += charStringAtual;
                                     } else {
-                                        pilhaTokens.push(new Token(stringCod, getCodigoToken("LITERAL")));
-                                        stringCod = "";
-                                        i = j;
-                                    }
-                                    break;
+                                        stringCod += charStringAtual;
+                                        if (stringCod.length() > 255) {
+                                            throw new Exception("O tamanho máximo para um literal é 255");
+                                        } else {
+                                            pilhaTokens.push(new Token(stringCod, getCodigoToken("LITERAL"), linha));
+                                            stringCod = "";
+                                            i = j;
+                                        }
+                                        break;
+
                                 }
                             }
+                                if (!stringCod.equals("")) {
+                                    throw new Exception("O literal precisa finalizar na mesma linha");
+                                }
+                                break;
+                            case ";":
+                            case " ":
+                            case ",":
+                            case ".":
+                            case ":":
+                            case "+":
+                            case "-":
+                            case "*":
+                            case "/":
+                            case "[":
+                            case "]":
+                            case "(":
+                            case ")":
+                            case "=":
+                            case ">":
+                            case "<":
+                                if (!token.trim().equals("")) {
+                                    pilhaTokens.push(new Token(token, getCodigoToken(token), linha)); // grava token
+                                    token = "";
+                                }
 
-                            if (!stringCod.equals("")) {
-                                throw new Exception("O literal precisa finalizar na mesma linha");
-                            }
-                            break;
-                        case "-":
-                            if (!token.trim().equals("")) {
-                                pilhaTokens.push(new Token(token, getCodigoToken(token))); // grava token
-                                token = "";
-                            }
-
-                            token = charAtual;
-                            break;
-                        case " ":
-                        case ";":
-                        case ",":
-                        case ".":
-                        case ":":
-                        case "+":
-                        case "*":
-                        case "/":
-                        case "[":
-                        case "]":
-                        case "(":
-                        case ")":
-                        case "=":
-                        case ">":
-                        case "<":
-                            if (!token.trim().equals("")) {
-                                pilhaTokens.push(new Token(token, getCodigoToken(token))); // grava token
-                                token = "";
-                            }
-
-                            if (!charAtual.trim().equals("")) { // ver se o limitador não é um espaço
-                                pilhaTokens.push(new Token(charAtual, getCodigoToken(charAtual))); // grava
-                                                                                                   // limitador
-                            }
-                            break;
-                        default:
-                            token += charAtual; // vai gravando o char ate encontrar o limitador
-                            token.trim();
-                    }
+                                if (!charAtual.trim().equals("")) { // ver se o limitador não é um espaço
+                                    pilhaTokens.push(new Token(charAtual, getCodigoToken(charAtual), linha)); // grava
+                                                                                                       // limitador
+                                }
+                                break;
+                            default:
+                                token += charAtual; // vai gravando o char ate encontrar o limitador
+                                token.trim();
+                        }
+                }
             }
-        }
         return pilhaTokens;
     }
 
@@ -146,7 +140,8 @@ public class AnalisadorLexico {
         }
     }
 
-    private Integer getCodigoToken(String token) throws Exception {
+
+    private Integer getCodigoToken(String token) throws Exception  {
         Integer codigoToken = Gramatica.DICIONARIO.get(token.toUpperCase());
         if (codigoToken == null) {
             // INTEGER ou é um IDENTIFICADOR
@@ -184,9 +179,17 @@ public class AnalisadorLexico {
         }
     }
 
-    private ArrayList<Linha> geraToken(ArrayList<Linha> Linhas) throws Exception {
-        for (Linha linha : Linhas) {
-            linha.setTokens(getListaTokens(linha.getTexto()));
+
+    private ArrayList<Linha> geraToken(ArrayList<Linha> Linhas) {
+        Linha linhaAtual = new Linha(1, "");
+
+        try {
+            for (Linha linha : Linhas) {
+                linhaAtual = linha;
+                linha.setTokens(getListaTokens(linha.getTexto(), linha.getLinha()));
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + " Erro na linha: " + linhaAtual.getLinha());
         }
 
         return Linhas;
