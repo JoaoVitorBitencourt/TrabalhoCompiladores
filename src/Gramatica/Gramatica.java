@@ -240,7 +240,7 @@ public class Gramatica {
 													// /><!-- Sinal de menor -->
 		TABELAPARSING.put("78,44", "<=|EXPSIMP"); // Linha alterada - <item codigo="78,44" derivacao="&lt;=|EXPSIMP"
 													// /><!-- Sinal de menor ou igual -->
-		TABELAPARSING.put("78,45", "!=|EXPSIMP"); // Linha alterada - <item codigo="78,45" derivacao="&lt;&gt;|EXPSIMP"
+		TABELAPARSING.put("78,45", "<>|EXPSIMP"); // Linha alterada - <item codigo="78,45" derivacao="&lt;&gt;|EXPSIMP"
 													// /><!-- Sinal de diferente -->
 		TABELAPARSING.put("78,46", "NULL");
 		TABELAPARSING.put("78,47", "NULL");
