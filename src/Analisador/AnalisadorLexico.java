@@ -180,7 +180,7 @@ public class AnalisadorLexico {
     }
 
 
-    private ArrayList<Linha> geraToken(ArrayList<Linha> Linhas) {
+    private ArrayList<Linha> geraToken(ArrayList<Linha> Linhas) throws Exception {
         Linha linhaAtual = new Linha(1, "");
 
         try {
@@ -189,7 +189,7 @@ public class AnalisadorLexico {
                 linha.setTokens(getListaTokens(linha.getTexto(), linha.getLinha()));
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage() + " Erro na linha: " + linhaAtual.getLinha());
+            throw new Exception(e.getMessage() + " \nErro na linha: " + linhaAtual.getLinha());
         }
 
         return Linhas;
