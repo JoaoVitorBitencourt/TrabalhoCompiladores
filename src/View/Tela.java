@@ -1,26 +1,17 @@
 package View;
 
 import java.awt.Color;
-//import java.awt.TextComponent;
-//import java.awt.ScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
-//import java.util.HashMap;
-//import java.util.Map;
 import java.util.Stack;
 
-//import java.awt.*;
-//import javax.swing.*;
-//import javax.swing.event.*;
 import javax.swing.text.Element;
 
 import Analisador.AnalisadorLexico;
 import Analisador.AnalisadorSintatico;
 import Analisador.Linha;
-import Analisador.Main;
-//import Enumerate_TextArea.LineNumberingTextArea;
 import Gramatica.Token;
 import Reader.Reader;
 import Writer.Escritor;
@@ -29,7 +20,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-//import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.io.File;
@@ -38,7 +28,6 @@ import javax.swing.JTextArea;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-//import javax.swing.table.TableModel;
 
 public class Tela extends JFrame {
 
@@ -49,6 +38,7 @@ public class Tela extends JFrame {
 	private static JTextArea lines;
 	private static JTextArea txtcomp;
 	private JTextArea console;
+	
 	private JTable tbDicionario;
 	private JButton btncompilar;
 	private JButton btnsalvar;
@@ -75,8 +65,6 @@ public class Tela extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		componentesCriar();
-
-		// main.executar();
 	}
 
 	private void componentesCriar() {
@@ -84,11 +72,7 @@ public class Tela extends JFrame {
 		txtcomp = new JTextArea();
 		lines = new JTextArea("1");
 
-		String Text = "";
 		JFileChooser Arquivo = new JFileChooser();
-		Main main = new Main();
-		main.executar();
-
 		labelArq = new JLabel("Arquivo");
 		labelArq.setBounds(20, 20, 200, 50);
 		getContentPane().add(labelArq);
@@ -155,15 +139,24 @@ public class Tela extends JFrame {
 		btncompilar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Icons/compilar.png")));
 
 		btncompilar.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e ) {
+				model = new DefaultTableModel();
+				model.addColumn("C�digo");
+				model.addColumn("Palavra");
+				tbDicionario.setModel(model);
 
-			public void mouseClicked(MouseEvent e) {
-				AnalisadorLexico a = new AnalisadorLexico();
-				AnalisadorSintatico b = new AnalisadorSintatico();
-				model = GerarTabela(model, a.gerarTokens(gerarLinhas(txtcomp.getText())));
+				AnalisadorLexico analisadorLexico = new AnalisadorLexico();
+				AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico();
 
-				Stack<Token> pilha = a.gerarTokens(gerarLinhas(txtcomp.getText()));
-				Stack<Token> pilhainversa = PilhaInversa(pilha);
-				b.analisar(pilhainversa);
+				try {
+					Stack<Token> pilha = analisadorLexico.gerarTokens(gerarLinhas(txtcomp.getText()));
+					model = GerarTabela(model, analisadorLexico.gerarTokens(gerarLinhas(txtcomp.getText())));
+					Stack<Token> pilhainversa = PilhaInversa(pilha);
+					analisadorSintatico.analisar(pilhainversa);
+					console.setText("Programa compilado com sucesso!");
+				} catch (Exception error) {
+					console.setText(error.getMessage());
+				}
 			}
 		});
 		getContentPane().add(btncompilar);
@@ -257,11 +250,7 @@ public class Tela extends JFrame {
 		return pilhaTokensInversa;
 	}
 
-	/*
-	 * public static void main(String[] args) {
-	 * new Tela().setVisible(true);
-	 * 
-	 * }
-	 */
-
+	public static void main(String[] args) {
+		new Tela().setVisible(true);
+	}
 }
