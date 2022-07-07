@@ -5,11 +5,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import javax.swing.text.Element;
 
 import Analisador.AnalisadorLexico;
+import Analisador.AnalisadorSemantico;
 import Analisador.AnalisadorSintatico;
 import Analisador.Linha;
 import Gramatica.Token;
@@ -147,12 +149,15 @@ public class Tela extends JFrame {
 
 				AnalisadorLexico analisadorLexico = new AnalisadorLexico();
 				AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico();
+				AnalisadorSemantico analisadorSemantico = new AnalisadorSemantico();
 
 				try {
 					Stack<Token> pilha = analisadorLexico.gerarTokens(gerarLinhas(txtcomp.getText()));
+					List<Token> pilhaSemantico = PilhaParaLista(pilha);
 					model = GerarTabela(model, analisadorLexico.gerarTokens(gerarLinhas(txtcomp.getText())));
 					Stack<Token> pilhainversa = PilhaInversa(pilha);
-					analisadorSintatico.analisar(pilhainversa);
+					// analisadorSintatico.analisar(pilhainversa);
+					analisadorSemantico.analisar(pilhaSemantico);
 					console.setText("Programa compilado com sucesso!");
 				} catch (Exception error) {
 					console.setText(error.getMessage());
@@ -196,8 +201,6 @@ public class Tela extends JFrame {
 		txtComp.setBounds(20, 100, 500, 500);
 
 		getContentPane().add(txtComp);
-
-		// model=GerarTabela(model,main.getTokens());
 
 		tbDicionario = new JTable(model);
 		spnDic = new JScrollPane(tbDicionario);
@@ -252,5 +255,18 @@ public class Tela extends JFrame {
 
 	public static void main(String[] args) {
 		new Tela().setVisible(true);
+	}
+
+	public List<Token> PilhaParaLista(Stack<Token> pilha) {
+		List<Token> lista = new ArrayList<Token>();
+		Stack<Token> clonePilha = new Stack<Token>();
+
+		clonePilha.addAll(pilha);
+
+		for(Token token : clonePilha){
+			lista.add(token);
+		}
+
+		return lista;
 	}
 }

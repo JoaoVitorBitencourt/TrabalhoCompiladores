@@ -34,12 +34,14 @@ public class AnalisadorSintatico {
             }
 
             if (X < 52 && A != null) { // - X sendo terminal
-
                 if (codigo.equals(X)) {
                     System.out.println("Removido da pilha A: " + pilhaA.peek());
                     System.out.println("Removido da pilha X: " + pilhaX.peek());
                     A = pilhaA.pop();
                     X = pilhaX.pop();
+                }
+                else {
+                    throw new Exception("Erro no código: " + A.getPalavra() + "\nLinha: " + A.getLinha());
                 }
             } else { // - X não terminal
 
