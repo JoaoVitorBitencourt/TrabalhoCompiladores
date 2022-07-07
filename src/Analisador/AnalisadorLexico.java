@@ -82,13 +82,20 @@ public class AnalisadorLexico {
                                     throw new Exception("O literal precisa finalizar na mesma linha");
                                 }
                                 break;
+                            case "-":
+                                if(!token.trim().equals("")) {
+                                    pilhaTokens.push(new Token(token, getCodigoToken(token), linha));
+                                    token = "";
+                                }
+
+                                token = charAtual;
+                                break;
                             case ";":
                             case " ":
                             case ",":
                             case ".":
                             case ":":
                             case "+":
-                            case "-":
                             case "*":
                             case "/":
                             case "[":
