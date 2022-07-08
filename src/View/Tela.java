@@ -156,7 +156,7 @@ public class Tela extends JFrame {
 					List<Token> pilhaSemantico = PilhaParaLista(pilha);
 					model = GerarTabela(model, analisadorLexico.gerarTokens(gerarLinhas(txtcomp.getText())));
 					Stack<Token> pilhainversa = PilhaInversa(pilha);
-					// analisadorSintatico.analisar(pilhainversa);
+					analisadorSintatico.analisar(pilhainversa);
 					analisadorSemantico.analisar(pilhaSemantico);
 					console.setText("Programa compilado com sucesso!");
 				} catch (Exception error) {

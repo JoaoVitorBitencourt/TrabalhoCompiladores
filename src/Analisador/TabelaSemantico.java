@@ -12,8 +12,8 @@ public class TabelaSemantico {
         return Nome;
     }
 
-    public String getCategoria() {
-        return Categoria.getDescricao();
+    public Categoria getCategoria() {
+        return Categoria;
     }
 
     public String getTipo() {
